@@ -2,14 +2,18 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
       colors: {
-        brand: {
-          light: '#FCD34D',
-          DEFAULT: '#F59E0B',
-          dark: '#C2410C',
-        },
+        'kashmir-bg': '#0B1120',
+        'kashmir-gold': '#D4AF37',
+        'kashmir-blue': '#7DD3FC',
+        'kashmir-white': '#F8FAFC',
       },
     },
   },
   plugins: [],
 };
+

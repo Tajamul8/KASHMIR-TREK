@@ -1,182 +1,656 @@
+'use client';
+
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Menu, X, Star, MapPin, Phone, Mail, Instagram, MessageCircle } from 'lucide-react';
 
-const navItems = [
-  { label: 'About', href: '#about' },
-  { label: 'Treks', href: '#treks' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Seasons', href: '#seasons' },
-  { label: 'Contact', href: '#contact' },
-];
+// Loading Component
+function LoadingAnimation() {
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-[#0B1120] via-[#0B1120] to-[#1a1f3a] opacity-0 animate-[fadeOut_0.8s_ease-out_0.5s_forwards]">
+      <div className="space-y-4 text-center">
+        <div className="flex justify-center gap-2">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="h-3 w-3 rounded-full bg-[#D4AF37] animate-[bounce_1.4s_infinite]"
+              style={{ animationDelay: `${i * 0.2}s` }}
+            />
+          ))}
+        </div>
+        <p className="text-[#F8FAFC] font-montserrat font-bold tracking-wider">KashmirTrek</p>
+      </div>
+    </div>
+  );
+}
 
-function App() {
+// Premium Navbar Component
+function PremiumNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const navItems = [
+    { label: 'Home', href: '#home' },
+    { label: 'Treks', href: '#treks' },
+    { label: 'Packages', href: '#packages' },
+    { label: 'Gallery', href: '#gallery' },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
+  ];
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'bg-slate-950/95 shadow-2xl backdrop-blur-xl' : 'bg-transparent'} `}>
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-          <a href="#" className="text-2xl font-black tracking-tight text-white md:text-3xl">
-            <span className="text-amber-300">Kashmir</span>Trek
+    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0B1120]/80 backdrop-blur-2xl shadow-2xl' : 'bg-transparent'}`}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+        {/* Logo */}
+        <a href="#home" className="text-2xl font-black tracking-tight text-white md:text-3xl font-montserrat">
+          KashmirTrek
+        </a>
+
+        {/* Desktop Nav */}
+        <nav className="hidden items-center gap-8 md:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="group relative text-sm font-medium text-[#F8FAFC] transition duration-300 hover:text-[#D4AF37]"
+            >
+              <span>{item.label}</span>
+              <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#D4AF37] to-[#7DD3FC] transition-all duration-300 group-hover:w-full" />
+            </a>
+          ))}
+        </nav>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-3">
+          {/* WhatsApp Icon */}
+          <a
+            href="https://wa.me/919797472650"
+            className="hidden h-10 w-10 items-center justify-center rounded-full bg-green-500/20 text-green-400 transition duration-300 hover:bg-green-500/40 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] lg:inline-flex"
+            title="Chat on WhatsApp"
+          >
+            <MessageCircle className="h-5 w-5" />
           </a>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="group text-sm font-medium text-slate-200 transition hover:text-amber-300"
-              >
-                <span>{item.label}</span>
-                <span className="block h-[2px] w-full scale-x-0 transform bg-amber-300 transition duration-300 group-hover:scale-x-100" />
-              </a>
-            ))}
-          </nav>
+          {/* Book Now Button */}
+          <a
+            href="#contact"
+            className="hidden rounded-full bg-gradient-to-r from-[#D4AF37] to-[#7DD3FC] px-6 py-2.5 text-sm font-semibold text-[#0B1120] transition duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:scale-105 md:inline-flex"
+          >
+            Book Now
+          </a>
 
-          <div className="flex items-center gap-3">
-            <a
-              href="#contact"
-              className="hidden rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:-translate-y-0.5 hover:bg-amber-400 md:inline-flex"
-            >
-              Book Now
-            </a>
-
-            <button
-              type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-100 transition hover:bg-slate-800 md:hidden"
-              onClick={() => setMenuOpen((state) => !state)}
-              aria-expanded={menuOpen}
-            >
-              <span className="sr-only">Toggle navigation</span>
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                {menuOpen ? (
-                  <path d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path d="M4 7h16M4 12h16M4 17h16" />
-                )}
-              </svg>
-            </button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF37]/30 bg-[#0B1120]/50 backdrop-blur-md text-[#D4AF37] transition duration-300 hover:bg-[#0B1120]/80 md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+      </div>
 
-        <div className={`overflow-hidden bg-slate-950/95 transition-[max-height] duration-500 md:hidden ${menuOpen ? 'max-h-60' : 'max-h-0'}`}>
-          <nav className="space-y-1 px-5 pb-5 pt-4">
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="bg-[#0B1120]/95 backdrop-blur-2xl border-t border-[#D4AF37]/20">
+          <nav className="mx-auto max-w-7xl space-y-2 px-5 py-4 lg:px-8">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800 hover:text-amber-300"
+                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-[#F8FAFC] transition duration-300 hover:bg-[#D4AF37]/10 hover:text-[#D4AF37]"
                 onClick={() => setMenuOpen(false)}
               >
                 {item.label}
               </a>
             ))}
+            <a
+              href="https://wa.me/919797472650"
+              className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-green-400 transition duration-300 hover:bg-green-500/10"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
           </nav>
         </div>
-      </header>
+      )}
+    </header>
+  );
+}
+
+// Animated Counter Component
+function AnimatedCounter({ end, duration = 2 }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const increment = end / (duration * 1000 / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [end, duration]);
+
+  return <span>{count}</span>;
+}
+
+// Main App Component
+function App() {
+  const [showLoading, setShowLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const packages = [
+    {
+      id: 1,
+      title: 'Gulmarg Trek',
+      duration: '5 Days',
+      rating: 4.9,
+      price: '₹12,999',
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=500&fit=crop',
+    },
+    {
+      id: 2,
+      title: 'Sonamarg Adventure',
+      duration: '7 Days',
+      rating: 4.8,
+      price: '₹15,999',
+      image: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=500&h=500&fit=crop',
+    },
+    {
+      id: 3,
+      title: 'Snow Camping',
+      duration: '4 Days',
+      rating: 4.9,
+      price: '₹9,999',
+      image: 'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=500&h=500&fit=crop',
+    },
+    {
+      id: 4,
+      title: 'Couple Tour Package',
+      duration: '6 Days',
+      rating: 4.7,
+      price: '₹18,999',
+      image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=500&fit=crop',
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: 'Priya Sharma',
+      role: 'Adventure Enthusiast',
+      text: 'An unforgettable experience! The guides were knowledgeable, and the views were absolutely breathtaking.',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    },
+    {
+      name: 'Rajesh Kumar',
+      role: 'Travel Blogger',
+      text: 'KashmirTrek redefined luxury trekking for me. Premium service with authentic local experiences.',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    },
+    {
+      name: 'Aisha Khan',
+      role: 'Corporate Executive',
+      text: 'Perfect escape from city life. Every detail was perfectly curated. Highly recommended!',
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+    },
+  ];
+
+  const galleryImages = [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC]">
+      {showLoading && <LoadingAnimation />}
+
+      <PremiumNavbar />
+
+      <style>{`
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; pointer-events: none; }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-slide-up { animation: slideUp 0.6s ease-out; }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+      `}</style>
 
       <main>
-        <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.15),_transparent_32%),linear-gradient(180deg,_rgba(15,23,42,0.96),_rgba(15,23,42,0.98))] pt-28">
-          <div className="mx-auto flex min-h-[80vh] max-w-7xl flex-col items-center justify-center px-5 py-16 text-center sm:px-6 lg:px-8">
-            <div className="mb-10 inline-flex rounded-full bg-amber-300/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-amber-200 ring-1 ring-amber-300/20">
-              Explore the new React navbar
-            </div>
-            <h1 className="max-w-4xl text-5xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Modern navigation for unforgettable Kashmir treks.
-            </h1>
-            <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
-              A smooth animated navbar built with React and Tailwind CSS, designed to feel premium, accessible, and responsive across every device.
-            </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <a href="#treks" className="inline-flex items-center justify-center rounded-full bg-amber-300 px-7 py-3 text-sm font-semibold text-slate-950 transition duration-300 hover:-translate-y-0.5 hover:bg-amber-400">
-                View Treks
+        {/* Hero Section */}
+        <section id="home" className="relative overflow-hidden pt-32 min-h-screen flex items-center justify-center">
+          {/* Background Video or Gradient */}
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0B1120] via-[#1a2a4a] to-[#0B1120]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(212,175,55,0.1),_transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(125,211,252,0.05),_transparent_50%)]" />
+            
+            {/* Floating Particles */}
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full bg-[#D4AF37]/10 animate-pulse"
+                style={{
+                  width: Math.random() * 100 + 20 + 'px',
+                  height: Math.random() * 100 + 20 + 'px',
+                  left: Math.random() * 100 + '%',
+                  top: Math.random() * 100 + '%',
+                  animationDelay: Math.random() * 5 + 's',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 z-1 bg-black/40" />
+
+          {/* Hero Content */}
+          <div className="relative z-10 mx-auto max-w-4xl px-5 text-center sm:px-6 lg:px-8 animate-fade-in">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mb-8 inline-flex rounded-full bg-[#D4AF37]/10 px-4 py-2 ring-1 ring-[#D4AF37]/30 backdrop-blur-md"
+            >
+              <span className="text-xs font-semibold uppercase tracking-widest text-[#D4AF37] font-montserrat">
+                Premium Luxury Experiences
+              </span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-black font-montserrat tracking-tight text-white mb-6 leading-tight"
+            >
+              Explore The <span className="bg-gradient-to-r from-[#D4AF37] to-[#7DD3FC] bg-clip-text text-transparent">Hidden Beauty</span> Of Kashmir
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="text-lg md:text-xl text-[#F8FAFC]/80 mb-10 max-w-2xl mx-auto"
+            >
+              Luxury trekking, camping & adventure experiences curated for the discerning traveler.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
+              <a
+                href="#packages"
+                className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#7DD3FC] text-[#0B1120] font-semibold transition duration-300 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] hover:scale-105"
+              >
+                Book Now
               </a>
-              <a href="#contact" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 px-7 py-3 text-sm font-semibold text-slate-100 transition duration-300 hover:-translate-y-0.5 hover:border-amber-300 hover:text-amber-300">
-                Contact Guide
+              <a
+                href="#treks"
+                className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#D4AF37]/50 text-[#F8FAFC] font-semibold transition duration-300 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] backdrop-blur-md"
+              >
+                Explore Treks
               </a>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Statistics Section */}
+        <section className="relative py-20 bg-[#0B1120]/50 border-y border-[#D4AF37]/10">
+          <div className="mx-auto max-w-6xl px-5 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                { label: '500+', desc: 'Happy Travelers' },
+                { label: '50+', desc: 'Trek Locations' },
+                { label: '4.9', desc: 'Average Rating' },
+                { label: '24/7', desc: 'Expert Support' },
+              ].map((stat, idx) => (
+                <div key={idx} className="text-center group">
+                  <div className="text-4xl font-bold font-montserrat bg-gradient-to-r from-[#D4AF37] to-[#7DD3FC] bg-clip-text text-transparent mb-2">
+                    {stat.label === '4.9' ? '4.9' : stat.label}
+                  </div>
+                  <p className="text-[#F8FAFC]/70 text-sm font-medium">{stat.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        <section id="about" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div>
-              <span className="text-sm font-semibold uppercase tracking-[0.32em] text-amber-300">About KashmirTrek</span>
-              <h2 className="mt-6 text-4xl font-black tracking-tight text-white sm:text-5xl">Adventure-led journeys curated by local experts.</h2>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                KashmirTrek delivers premium trekking experiences across Kashmir's alpine valleys, pristine lakes, and Himalayan summits. Our animated navbar keeps explorers connected to every part of the journey.
+        {/* Packages Section */}
+        <section id="packages" className="py-24 relative">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-black font-montserrat text-white mb-4">
+                Premium Packages
+              </h2>
+              <p className="text-[#F8FAFC]/70 max-w-2xl mx-auto">
+                Handcrafted luxury experiences for every adventure seeker
               </p>
             </div>
-            <div className="rounded-[2rem] bg-slate-900/70 p-8 ring-1 ring-white/10 backdrop-blur-xl">
-              <div className="space-y-6">
-                <div className="rounded-3xl bg-slate-950/60 p-6 shadow-[0_20px_70px_-30px_rgba(6,11,34,0.8)]">
-                  <h3 className="text-xl font-semibold text-white">Fast access</h3>
-                  <p className="mt-3 text-slate-400">Instant navigation between sections with smooth state transitions.</p>
-                </div>
-                <div className="rounded-3xl bg-slate-950/60 p-6 shadow-[0_20px_70px_-30px_rgba(6,11,34,0.8)]">
-                  <h3 className="text-xl font-semibold text-white">Responsive design</h3>
-                  <p className="mt-3 text-slate-400">A mobile-friendly menu and animated interactions for every viewport.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <section id="treks" className="bg-slate-900/50 py-20">
-          <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-            <div className="grid gap-8 lg:grid-cols-3">
-              {['Winter Summit Trek', 'Wildflower Valley', 'Alpine Lake Trek'].map((title, index) => (
-                <article key={title} className="group overflow-hidden rounded-[2rem] border border-slate-700/50 bg-slate-950/75 p-8 transition duration-500 hover:-translate-y-2 hover:border-amber-300/40 hover:bg-slate-900/90">
-                  <div className="mb-5 h-44 rounded-3xl bg-gradient-to-br from-slate-700 to-slate-900 transition duration-500 group-hover:from-amber-300/20 group-hover:to-amber-300/5" />
-                  <h3 className="text-2xl font-semibold text-white">{title}</h3>
-                  <p className="mt-3 text-slate-400">{index === 0 ? '12 Days • Advanced' : index === 1 ? '5 Days • Easy' : '8 Days • Moderate'}</p>
-                </article>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {packages.map((pkg, idx) => (
+                <motion.div
+                  key={pkg.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -10 }}
+                  className="group relative overflow-hidden rounded-2xl bg-[#1a2a4a] border border-[#D4AF37]/20 transition duration-500 hover:border-[#D4AF37]/60 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)]"
+                >
+                  {/* Image */}
+                  <div className="relative overflow-hidden h-48 bg-[#0B1120]">
+                    <motion.img
+                      src={pkg.image}
+                      alt={pkg.title}
+                      className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                      whileHover={{ scale: 1.15 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] to-transparent opacity-60" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold font-montserrat text-white mb-2">
+                      {pkg.title}
+                    </h3>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-sm text-[#F8FAFC]/60">{pkg.duration}</span>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-[#D4AF37] text-[#D4AF37]" />
+                        <span className="text-sm font-semibold text-[#D4AF37]">{pkg.rating}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-2xl font-bold font-montserrat text-[#D4AF37]">
+                        {pkg.price}
+                      </span>
+                    </div>
+
+                    <motion.a
+                      href="https://wa.me/919797472650"
+                      className="block w-full text-center px-4 py-2 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#7DD3FC] text-[#0B1120] font-semibold transition duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:scale-105"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Book Package
+                    </motion.a>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="gallery" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-black tracking-tight text-white">Gallery</h2>
-          <p className="mt-4 max-w-2xl text-slate-400">A clean, modern navigation experience that fits the KashmirTrek brand.</p>
-        </section>
+        {/* Treks Section */}
+        <section id="treks" className="py-24 bg-[#0B1120]/50 border-y border-[#D4AF37]/10">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-black font-montserrat text-white mb-4">
+                Featured Treks
+              </h2>
+              <p className="text-[#F8FAFC]/70 max-w-2xl mx-auto">
+                Discover iconic trails through Kashmir's pristine landscapes
+              </p>
+            </div>
 
-        <section id="seasons" className="bg-slate-900/50 py-20">
-          <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-black tracking-tight text-white">Best Seasons</h2>
-            <div className="mt-8 grid gap-6 md:grid-cols-3">
-              {['Spring', 'Summer', 'Winter'].map((season, index) => (
-                <div key={season} className="rounded-[2rem] bg-slate-950/85 p-8 ring-1 ring-slate-700/60 transition hover:-translate-y-1 hover:ring-amber-300/40">
-                  <h3 className="text-2xl font-semibold text-white">{season}</h3>
-                  <p className="mt-3 text-slate-400">{index === 0 ? 'Wildflowers and green valleys.' : index === 1 ? 'Perfect for alpine treks.' : 'Snow-covered magical landscapes.'}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { name: 'Gulmarg Summit', difficulty: 'Moderate', altitude: '2,650m', days: '5 Days' },
+                { name: 'Sonamarg Loop', difficulty: 'Easy', altitude: '2,100m', days: '3 Days' },
+                { name: 'Pahalgam Valley', difficulty: 'Hard', altitude: '3,500m', days: '7 Days' },
+              ].map((trek, idx) => (
+                <div
+                  key={idx}
+                  className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a2a4a] to-[#0B1120] border border-[#D4AF37]/20 p-8 transition duration-500 hover:border-[#D4AF37]/60 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)]"
+                >
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(212,175,55,0.1),_transparent_60%)]" />
+                  <div className="relative z-10">
+                    <h3 className="text-2xl font-bold font-montserrat text-white mb-4">{trek.name}</h3>
+                    <div className="space-y-3 text-[#F8FAFC]/80">
+                      <p className="flex items-center gap-2">
+                        <span className="text-[#D4AF37]">•</span> Difficulty: {trek.difficulty}
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-[#D4AF37]">•</span> Altitude: {trek.altitude}
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-[#D4AF37]">•</span> Duration: {trek.days}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="contact" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
-          <div className="rounded-[2rem] bg-slate-900/80 p-10 ring-1 ring-white/10 backdrop-blur-xl">
-            <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+        {/* Gallery Section */}
+        <section id="gallery" className="py-24">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-black font-montserrat text-white mb-4">
+                Gallery
+              </h2>
+              <p className="text-[#F8FAFC]/70 max-w-2xl mx-auto">
+                Cinematic views of Kashmir's breathtaking landscapes
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]">
+              {galleryImages.map((img, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: idx * 0.05 }}
+                  viewport={{ once: true }}
+                  className="group relative overflow-hidden rounded-2xl cursor-pointer"
+                  style={{ gridColumn: idx % 5 === 0 ? 'span 2' : 'span 1', gridRow: idx % 3 === 0 ? 'span 2' : 'span 1' }}
+                >
+                  <motion.img
+                    src={img}
+                    alt={`Gallery ${idx + 1}`}
+                    className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                    whileHover={{ scale: 1.15 }}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    className="absolute inset-0 bg-gradient-to-t from-[#0B1120]/80 to-transparent flex items-end"
+                  >
+                    <div className="p-6 w-full">
+                      <p className="text-white font-semibold">Kashmir Landscape</p>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section id="about" className="py-24 bg-[#0B1120]/50 border-y border-[#D4AF37]/10">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-black font-montserrat text-white mb-4">
+                What Travelers Say
+              </h2>
+              <p className="text-[#F8FAFC]/70 max-w-2xl mx-auto">
+                Real stories from our premium clients
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: idx * 0.15 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8 }}
+                  className="relative rounded-2xl border border-[#D4AF37]/20 bg-[#0B1120]/80 backdrop-blur-xl p-8 transition duration-500 hover:border-[#D4AF37]/60 hover:shadow-[0_0_40px_rgba(212,175,55,0.2)]"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <motion.img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="h-12 w-12 rounded-full object-cover border border-[#D4AF37]/30"
+                      whileHover={{ scale: 1.1 }}
+                    />
+                    <div>
+                      <p className="font-semibold text-white font-montserrat">{testimonial.name}</p>
+                      <p className="text-sm text-[#F8FAFC]/60">{testimonial.role}</p>
+                    </div>
+                  </div>
+
+                  <p className="text-[#F8FAFC]/80 italic">"{testimonial.text}"</p>
+
+                  <div className="mt-4 flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-[#D4AF37] text-[#D4AF37]" />
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Booking CTA Section */}
+        <section className="py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/5 via-transparent to-[#7DD3FC]/5" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.1),_transparent_70%)]" />
+
+          <div className="relative z-10 mx-auto max-w-4xl px-5 text-center lg:px-8">
+            <h2 className="text-4xl md:text-5xl font-black font-montserrat text-white mb-4">
+              Ready For Your Next Adventure?
+            </h2>
+            <p className="text-lg text-[#F8FAFC]/70 mb-12 max-w-2xl mx-auto">
+              Join thousands of travelers who've experienced the magic of Kashmir with us.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="https://wa.me/919797472650"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-green-500 text-white font-semibold transition duration-300 hover:shadow-[0_0_40px_rgba(34,197,94,0.4)] hover:scale-105"
+              >
+                <MessageCircle className="h-5 w-5" />
+                WhatsApp Booking
+              </a>
+              <a
+                href="tel:+919797472650"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-[#D4AF37]/50 text-[#F8FAFC] font-semibold transition duration-300 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] backdrop-blur-md"
+              >
+                <Phone className="h-5 w-5" />
+                Call Now
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer id="contact" className="bg-[#0B1120]/95 border-t border-[#D4AF37]/10 py-16">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+              {/* Brand */}
               <div>
-                <h2 className="text-4xl font-black tracking-tight text-white">Contact Us</h2>
-                <p className="mt-4 text-slate-400">Reach out to book your next Kashmir trekking adventure with a premium, animated interface.</p>
+                <a href="#home" className="text-2xl font-black font-montserrat text-white mb-4 inline-block">
+                  KashmirTrek
+                </a>
+                <p className="text-[#F8FAFC]/60 text-sm">
+                  Premium luxury trekking & adventure experiences in Kashmir.
+                </p>
               </div>
-              <div className="space-y-4 text-slate-200">
-                <p><span className="font-semibold text-amber-300">Phone:</span> +91 9797472650</p>
-                <p><span className="font-semibold text-amber-300">WhatsApp:</span> <a href="https://wa.me/919797472650" className="text-slate-100 transition hover:text-amber-300">Chat on WhatsApp</a></p>
-                <p><span className="font-semibold text-amber-300">Email:</span> <a href="mailto:shahtajamul88@gmail.com" className="text-slate-100 transition hover:text-amber-300">shahtajamul88@gmail.com</a></p>
+
+              {/* Quick Links */}
+              <div>
+                <h3 className="font-bold font-montserrat text-white mb-4">Quick Links</h3>
+                <ul className="space-y-2 text-[#F8FAFC]/60 text-sm">
+                  <li><a href="#home" className="transition hover:text-[#D4AF37]">Home</a></li>
+                  <li><a href="#packages" className="transition hover:text-[#D4AF37]">Packages</a></li>
+                  <li><a href="#gallery" className="transition hover:text-[#D4AF37]">Gallery</a></li>
+                  <li><a href="#about" className="transition hover:text-[#D4AF37]">About</a></li>
+                </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div>
+                <h3 className="font-bold font-montserrat text-white mb-4">Contact</h3>
+                <ul className="space-y-3 text-[#F8FAFC]/60 text-sm">
+                  <li className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-[#D4AF37]" />
+                    <a href="tel:+919797472650" className="transition hover:text-[#D4AF37]">+91 9797472650</a>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-[#D4AF37]" />
+                    <a href="mailto:shahtajamul88@gmail.com" className="transition hover:text-[#D4AF37]">shahtajamul88@gmail.com</a>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-[#D4AF37]" />
+                    <span>Kashmir, India</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Social */}
+              <div>
+                <h3 className="font-bold font-montserrat text-white mb-4">Follow Us</h3>
+                <div className="flex gap-4">
+                  <a
+                    href="https://instagram.com"
+                    className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] transition duration-300 hover:bg-[#D4AF37]/20"
+                  >
+                    <Instagram className="h-5 w-5" />
+                  </a>
+                  <a
+                    href="https://wa.me/919797472650"
+                    className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-green-500/10 text-green-400 transition duration-300 hover:bg-green-500/20"
+                  >
+                    <MessageCircle className="h-5 w-5" />
+                  </a>
+                </div>
               </div>
             </div>
+
+            <div className="border-t border-[#D4AF37]/10 pt-8 text-center text-[#F8FAFC]/60 text-sm">
+              <p>© 2026 KashmirTrek. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
           </div>
-        </section>
+        </footer>
       </main>
     </div>
   );
