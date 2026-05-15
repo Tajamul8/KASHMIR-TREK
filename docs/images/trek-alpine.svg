@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs>
+    <linearGradient id="alpine-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#alpine-bg)" />
+  <path d="M80 420 L200 160 L360 340 L520 120 L600 420 Z" fill="#94a3b8" />
+  <path d="M120 420 L240 200 L380 380 L540 140 L620 420 Z" fill="#1e40af" opacity="0.85" />
+  <circle cx="520" cy="80" r="45" fill="#fbbf24" opacity="0.9" />
+</svg>

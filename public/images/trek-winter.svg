@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs>
+    <linearGradient id="winter-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#winter-bg)" />
+  <path d="M0 360 L140 220 L280 360 L420 200 L560 360 L640 240 V480 H0 Z" fill="#e2e8f0" opacity="0.9" />
+  <path d="M40 360 L180 240 L320 360 L460 220 L600 360" fill="none" stroke="#cbd5e1" stroke-width="24" stroke-linecap="round" opacity="0.7" />
+</svg>
